@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Trasy z OpenStreetMap</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+</head>
+<body>
+    <div style="display: flex;">
+        <div style="flex: 1; padding: 20px;">
+            <input type="text" id="startCity" placeholder="Miasto początkowe">
+            <input type="text" id="endCity" placeholder="Miasto końcowe">
+            <button onclick="showRoute()">Pokaż trasę</button>
+        </div>
+        <div id="map" style="flex: 2; height: 600px;"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

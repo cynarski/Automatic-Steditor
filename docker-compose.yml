@@ -1,14 +1,13 @@
-version: '3.9'
+version: '3.8'
 
 services:
   postgres:
     image: postgres:16
     restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=badania2023
+      - POSTGRES_DB=AutomaticSteditor
     ports:
       - "5432:5432"
     networks:
@@ -18,7 +17,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      - PGADMIN_DEFAULT_EMAIL=badanka@agh.pl
+      - PGADMIN_DEFAULT_EMAIL=badanka@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=badania2023
     ports:
       - "5050:80"

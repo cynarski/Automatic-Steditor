@@ -6,13 +6,16 @@
     <title>Mapa Trasy z OpenStreetMap</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <div style="display: flex;">
-        <div style="flex: 1; padding: 20px;">
+        <div class="controls-panel" style="flex: 1;">
             <input type="text" id="startCity" placeholder="Miasto początkowe">
             <input type="text" id="endCity" placeholder="Miasto końcowe">
             <button onclick="showRoute()">Pokaż trasę</button>
+            <button onclick="clearRoutes()">Wyczyść trasy</button>
+            <p id="route-info"></p>
         </div>
         <div id="map" style="flex: 2; height: 600px;"></div>
     </div>

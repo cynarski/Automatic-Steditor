@@ -54,34 +54,20 @@
 //     document.getElementById('route-info-list').innerHTML = ''; // Czyszczenie listy
 // }
 
+function saveCity() {
+    const city = document.getElementById('city').value;
+    const product = document.getElementById('productSelect').value;
 
-function saveRoute() {
-    const startCity = document.getElementById('startCity').value;
-    const endCity = document.getElementById('endCity').value;
+    if (!city || !product) {
+        alert("Proszę wybrać miasto i produkt.");
+        return;
+    }
 
-    let routes = JSON.parse(localStorage.getItem('routes')) || [];
-    routes.push({ startCity, endCity });
-    localStorage.setItem('routes', JSON.stringify(routes));
+    let selections = JSON.parse(localStorage.getItem('selections')) || [];
+    selections.push({ city, product });
+    localStorage.setItem('selections', JSON.stringify(selections));
 
-    updateRouteDisplay();
-}
-
-function updateRouteDisplay() {
-    let routes = JSON.parse(localStorage.getItem('routes')) || [];
-    let routeContainer = document.getElementById('routeStatus');
-    routeContainer.innerHTML = ''; // Czyści poprzednie trasy
-
-    routes.forEach(route => {
-        let label = document.createElement('label');
-        label.textContent = `Z: ${route.startCity}, Do: ${route.endCity}`;
-        label.style.display = 'block'; // Każda trasa w nowej linii
-        routeContainer.appendChild(label);
-    });
-}
-
-function clearAllRoutes() {
-    localStorage.removeItem('routes');
-    updateRouteDisplay();
+    updateDisplay();
 }
 
 function showProductImage() {
@@ -95,9 +81,29 @@ function showProductImage() {
     } else {
         image.style.display = 'none';
     }
-
 }
 
-// Wywołanie tej funkcji przy ładowaniu strony, aby wyświetlić zapisane trasy
-updateRouteDisplay();
+function updateDisplay() {
+    const selections = JSON.parse(localStorage.getItem('selections')) || [];
+    const tableBody = document.getElementById('infoTable').getElementsByTagName('tbody')[0];
+
+    tableBody.innerHTML = '';
+
+    selections.forEach(selection => {
+        let row = tableBody.insertRow();
+        let cellCity = row.insertCell(0);
+        let cellProduct = row.insertCell(1);
+
+        cellCity.textContent = selection.city;
+        cellProduct.textContent = selection.product;
+    });
+}
+
+function clearSelection() {
+    localStorage.removeItem('selections');
+    updateDisplay();
+    document.getElementById('productImage').style.display = 'none';
+}
+
+updateDisplay();
 

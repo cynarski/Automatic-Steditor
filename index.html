@@ -32,36 +32,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wprowadzanie Trasy</title>
+    <title>Wprowadzanie Miasta i Wybór Produktu</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-<!--        <div class="controls-panel">-->
         <div class="left-panel">
             <input type="text" id="city" placeholder="Wprowadź miasto"><br>
             <button onclick="saveCity()">Zapisz miasto</button>
-<!--            <button onclick="saveRoute()">Save route</button>-->
-            <button onclick="clearAllRoutes()">Delete all routes</button>
+            <button onclick="clearSelection()">Wyczyść wybór</button>
 
             <select id="productSelect" onchange="showProductImage()">
                 <option value="">Wybierz produkt</option>
                 <option value="milk.jpg">Milk</option>
                 <option value="pepper.jpg">Pepper</option>
+
             </select>
             <img id="productImage" src="" alt="Wybierz produkt, aby zobaczyć zdjęcie">
         </div>
-<!--        <div class="route-display">-->
+
         <div class="right-panel">
-            <h3>Status trasy:</h3>
-            <p id="routeStatus"></p>
+            <h3>Wybrane informacje:</h3>
+            <table id="infoTable">
+                <thead>
+                    <tr>
+                        <th>Miasto</th>
+                        <th>Produkt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Tutaj będą dodawane wiersze z wybranymi miastami i produktami -->
+                </tbody>
+            </table>
         </div>
     </div>
-     <div class="map-link">
+
+    <div class="map-link">
         <button onclick="goToMapPage()">Przejdź do Mapy</button>
     </div>
+
     <script src="app.js"></script>
 </body>
+</html>
 </html>
 
 

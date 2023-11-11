@@ -1,27 +1,48 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="pl">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Mapa Trasy z OpenStreetMap</title>-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />-->
+<!--    <link rel="stylesheet" href="style.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div style="display: flex;">-->
+<!--        <div class="controls-panel" style="flex: 1;">-->
+<!--            <input type="text" id="startCity" placeholder="Miasto początkowe">-->
+<!--            <input type="text" id="endCity" placeholder="Miasto końcowe">-->
+<!--            <button onclick="showRoute()">Pokaż trasę</button>-->
+<!--            <button onclick="clearRoutes()">Wyczyść trasy</button>-->
+<!--            <p id="route-info"></p>-->
+<!--        </div>-->
+<!--        <div id="map" style="flex: 2; height: 600px;"></div>-->
+<!--    </div>-->
+
+<!--    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>-->
+<!--    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>-->
+<!--    <script src="app.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Trasy z OpenStreetMap</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="style.css" />
+    <title>Wprowadzanie Trasy</title>
+    <link rel="stylesheet" href="index_style.css">
 </head>
 <body>
-    <div style="display: flex;">
-        <div class="controls-panel" style="flex: 1;">
-            <input type="text" id="startCity" placeholder="Miasto początkowe">
-            <input type="text" id="endCity" placeholder="Miasto końcowe">
-            <button onclick="showRoute()">Pokaż trasę</button>
-            <button onclick="clearRoutes()">Wyczyść trasy</button>
-            <p id="route-info"></p>
-        </div>
-        <div id="map" style="flex: 2; height: 600px;"></div>
+    <div class="controls-panel">
+        <input type="text" id="startCity" placeholder="Miasto początkowe"><br>
+        <input type="text" id="endCity" placeholder="Miasto końcowe"><br>
+        <button onclick="saveRoute()">Zapisz trasę</button>
     </div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
+
+

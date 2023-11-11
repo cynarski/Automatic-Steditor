@@ -33,16 +33,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wprowadzanie Trasy</title>
-    <link rel="stylesheet" href="index_style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="controls-panel">
-        <input type="text" id="startCity" placeholder="Miasto początkowe"><br>
-        <input type="text" id="endCity" placeholder="Miasto końcowe"><br>
-        <button onclick="saveRoute()">Zapisz trasę</button>
+    <div class="container">
+<!--        <div class="controls-panel">-->
+        <div class="left-panel">
+            <input type="text" id="city" placeholder="Wprowadź miasto"><br>
+            <button onclick="saveCity()">Zapisz miasto</button>
+<!--            <button onclick="saveRoute()">Save route</button>-->
+            <button onclick="clearAllRoutes()">Delete all routes</button>
+
+            <select id="productSelect" onchange="showProductImage()">
+                <option value="">Wybierz produkt</option>
+                <option value="milk.jpg">Milk</option>
+                <option value="pepper.jpg">Pepper</option>
+            </select>
+            <img id="productImage" src="" alt="Wybierz produkt, aby zobaczyć zdjęcie">
+        </div>
+<!--        <div class="route-display">-->
+        <div class="right-panel">
+            <h3>Status trasy:</h3>
+            <p id="routeStatus"></p>
+        </div>
+    </div>
+     <div class="map-link">
+        <button onclick="goToMapPage()">Przejdź do Mapy</button>
     </div>
     <script src="app.js"></script>
 </body>
 </html>
+
+
 
 

@@ -1,3 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    /*flex-direction: row-reverse; !* to sprawi, że 'Status trasy' znajdzie się po prawej stronie *!*/
+    /*justify-content: flex-start; !* ustawia dzieci kontenera na początek kontenera *!*/
+    align-items: flex-start; /* wyrównuje dzieci do góry kontenera */
+    gap: 20px; /* dodaje odstęp pomiędzy elementami w kontenerze */
+}
+
+.controls-panel, .route-display {
+    width: calc(50% - 10px); /* ustawia szerokość na połowę kontenera minus połowa odstępu */
+    padding: 10px;
+}
+
 button {
     padding: 10px;
     margin-bottom: 10px;
@@ -6,4 +26,11 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }

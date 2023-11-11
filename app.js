@@ -59,9 +59,45 @@ function saveRoute() {
     const startCity = document.getElementById('startCity').value;
     const endCity = document.getElementById('endCity').value;
 
-    localStorage.setItem('startCity', startCity);
-    localStorage.setItem('endCity', endCity);
+    let routes = JSON.parse(localStorage.getItem('routes')) || [];
+    routes.push({ startCity, endCity });
+    localStorage.setItem('routes', JSON.stringify(routes));
 
-    // Przekierowanie do strony z mapą
-    window.location.href = 'map.html';
+    updateRouteDisplay();
 }
+
+function updateRouteDisplay() {
+    let routes = JSON.parse(localStorage.getItem('routes')) || [];
+    let routeContainer = document.getElementById('routeStatus');
+    routeContainer.innerHTML = ''; // Czyści poprzednie trasy
+
+    routes.forEach(route => {
+        let label = document.createElement('label');
+        label.textContent = `Z: ${route.startCity}, Do: ${route.endCity}`;
+        label.style.display = 'block'; // Każda trasa w nowej linii
+        routeContainer.appendChild(label);
+    });
+}
+
+function clearAllRoutes() {
+    localStorage.removeItem('routes');
+    updateRouteDisplay();
+}
+
+function showProductImage() {
+    var select = document.getElementById('productSelect');
+    var image = document.getElementById('productImage');
+    var selectedValue = select.value;
+
+    if (selectedValue) {
+        image.src = 'images/' + selectedValue;
+        image.style.display = 'block';
+    } else {
+        image.style.display = 'none';
+    }
+
+}
+
+// Wywołanie tej funkcji przy ładowaniu strony, aby wyświetlić zapisane trasy
+updateRouteDisplay();
+

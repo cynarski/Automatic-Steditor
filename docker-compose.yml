@@ -5,8 +5,8 @@ services:
     image: postgres:16
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=badania2023
+      - POSTGRES_USER=b.barszczak35%40gmail.com
+      - POSTGRES_PASSWORD=Cib02anYPEqf
       - POSTGRES_DB=AutomaticSteditor
     ports:
       - "5432:5432"

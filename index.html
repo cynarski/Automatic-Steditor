@@ -1,27 +1,81 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="pl">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Mapa Trasy z OpenStreetMap</title>-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />-->
+<!--    <link rel="stylesheet" href="style.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div style="display: flex;">-->
+<!--        <div class="controls-panel" style="flex: 1;">-->
+<!--            <input type="text" id="startCity" placeholder="Miasto początkowe">-->
+<!--            <input type="text" id="endCity" placeholder="Miasto końcowe">-->
+<!--            <button onclick="showRoute()">Pokaż trasę</button>-->
+<!--            <button onclick="clearRoutes()">Wyczyść trasy</button>-->
+<!--            <p id="route-info"></p>-->
+<!--        </div>-->
+<!--        <div id="map" style="flex: 2; height: 600px;"></div>-->
+<!--    </div>-->
+
+<!--    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>-->
+<!--    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>-->
+<!--    <script src="app.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Trasy z OpenStreetMap</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="style.css" />
+    <title>Wprowadzanie Miasta i Wybór Produktu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div style="display: flex;">
-        <div class="controls-panel" style="flex: 1;">
-            <input type="text" id="startCity" placeholder="Miasto początkowe">
-            <input type="text" id="endCity" placeholder="Miasto końcowe">
-            <button onclick="showRoute()">Pokaż trasę</button>
-            <button onclick="clearRoutes()">Wyczyść trasy</button>
-            <p id="route-info"></p>
+    <div class="container">
+        <div class="left-panel">
+            <input type="text" id="city" placeholder="Wprowadź miasto"><br>
+            <button onclick="saveCity()">Zapisz miasto</button>
+            <button onclick="clearSelection()">Wyczyść wybór</button>
+
+            <select id="productSelect" onchange="showProductImage()">
+                <option value="">Wybierz produkt</option>
+                <option value="milk.jpg">Milk</option>
+                <option value="pepper.jpg">Pepper</option>
+
+            </select>
+            <img id="productImage" src="" alt="Wybierz produkt, aby zobaczyć zdjęcie">
         </div>
-        <div id="map" style="flex: 2; height: 600px;"></div>
+
+        <div class="right-panel">
+            <h3>Wybrane informacje:</h3>
+            <table id="infoTable">
+                <thead>
+                    <tr>
+                        <th>Miasto</th>
+                        <th>Produkt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Tutaj będą dodawane wiersze z wybranymi miastami i produktami -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <div class="map-link">
+        <button onclick="goToMapPage()">Przejdź do Mapy</button>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
+</html>
+
+
+
+

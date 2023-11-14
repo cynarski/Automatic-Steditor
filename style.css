@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    margin: 20px;
+    padding: 10px;
+    /* Usunięto tło, zaokrąglenie rogów i cień */
+}
+
+#productImage {
+    max-width: 300px;
+    display: none;
+}
+
+.map-link {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+button {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="text"], select {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    /* Usunięto tło z nagłówków tabeli */
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+/* Usunięto stylizację tła dla nagłówków tabeli */

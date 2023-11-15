@@ -104,9 +104,7 @@ function clearSelection() {
 }
 function clearEverything() {
     clearSelection(); // funkcja czyszcząca tabelę
-    if (window.clearMarkers) {
-        window.clearMarkers(); // funkcja czyszcząca markery na mapie
-    }
+    clearMarkers();
 }
 
 // updateDisplay();

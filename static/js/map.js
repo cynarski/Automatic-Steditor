@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicjalizacja mapy
     var map = L.map('map').setView([52.237049, 21.017532], 6); // Centrum Polski
     var markers = []; // Tablica do przechowywania markerów
 
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Funkcja do dodawania markera na mapie
+    // Funkcja dodająca marker na mapie
     function addCityMarker(lat, lon) {
         var marker = L.marker([lat, lon]).addTo(map);
         markers.push(marker); // Dodaj marker do tablicy
@@ -35,17 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Nasłuchiwacz zdarzeń dla wyboru miasta
-    document.getElementById('citySelect').addEventListener('change', function() {
-        var cityName = this.value;
-        if (cityName) {
-            findCity(cityName);
-        }
-    });
-
-    // Eksportuj funkcje do obiektu window, aby były dostępne globalnie
-    window.findCity = findCity;
-
     // Funkcja do czyszczenia wszystkich markerów z mapy
     window.clearMarkers = function() {
         markers.forEach(function(marker) {
@@ -54,4 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
         markers = []; // Resetowanie tablicy markerów
     };
 
+    // Nasłuchiwacz zdarzeń dla przycisku "Zapisz miasto"
+    document.getElementById('saveCityButton').addEventListener('click', function() {
+        var cityName = document.getElementById('citySelect').value;
+        if (cityName) {
+            findCity(cityName);
+        }
+    });
 });

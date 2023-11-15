@@ -109,5 +109,5 @@ function clearEverything() {
     }
 }
 
-updateDisplay();
+// updateDisplay();
 

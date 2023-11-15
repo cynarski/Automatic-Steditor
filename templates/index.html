@@ -32,14 +32,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD:templates/index.html
     <title>Wprowadzanie Miasta i Wybór Produktu</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-=======
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Automatic Speditor</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css">
->>>>>>> origin/michał-test:index.html
 </head>
 <body>
     <div class="container">
@@ -89,21 +85,13 @@
     <div class="map-link">
         <button onclick="goToMapPage()">Przejdź do Mapy</button>
     </div>
-<<<<<<< HEAD:templates/index.html
 
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
-</body>
-</html>
-
-
-=======
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="app.js"></script>
-    <script src="map.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 </body>
 </html>
 
->>>>>>> origin/michał-test:index.html
 
 
 

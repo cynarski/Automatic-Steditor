@@ -32,36 +32,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD:templates/index.html
     <title>Wprowadzanie Miasta i Wybór Produktu</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+=======
+    <title>Automatic Speditor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+>>>>>>> origin/michał-test:index.html
 </head>
 <body>
     <div class="container">
+
         <div class="left-panel">
-            <input type="text" id="city" placeholder="Wprowadź miasto"><br>
+            <select id="citySelect">
+                <option value="">Wybierz miasto</option>
+                <option value="Kraków">Kraków</option>
+                <option value="Warszawa">Warszawa</option>
+                <option value="Wroclaw">Wrocław</option>
+
+
+            </select><br>
+            <select id="productSelect" multiple>
+                <option value="milk">Milk</option>
+                <option value="cheese">Cheese</option>
+                <option value="tomatoes">Tomatoes</option>
+                <option value="apples">Apples</option>
+                <option value="pepper">Pepper</option>
+                <option value="eggs">Eggs</option>
+                <option value="meat">Meat</option>
+                <option value="water">Water</option>
+            </select><br>
+            <input type="number" id="productWeight" placeholder="Waga produktu (t)"><br>
             <button onclick="saveCity()">Zapisz miasto</button>
-            <button onclick="clearSelection()">Wyczyść wybór</button>
-
-            <select id="productSelect" onchange="showProductImage()">
-                <option value="">Wybierz produkt</option>
-                <option value="milk.jpg">Milk</option>
-                <option value="pepper.jpg">Pepper</option>
-
-            </select>
-            <img id="productImage" src="" alt="Wybierz produkt, aby zobaczyć zdjęcie">
+            <button onclick="clearEverything()">Wyczyść wybór</button>
+            <button onclick="clearMarkers()">Wyczyść wybór</button>
+            <div id="map" class="map-container"></div>
         </div>
 
         <div class="right-panel">
-            <h3>Wybrane informacje:</h3>
+            <h3>Data:</h3>
             <table id="infoTable">
                 <thead>
                     <tr>
-                        <th>Miasto</th>
-                        <th>Produkt</th>
+                        <th>City</th>
+                        <th>Product</th>
+                        <th>Weight</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Tutaj będą dodawane wiersze z wybranymi miastami i produktami -->
                 </tbody>
             </table>
         </div>
@@ -70,12 +89,21 @@
     <div class="map-link">
         <button onclick="goToMapPage()">Przejdź do Mapy</button>
     </div>
+<<<<<<< HEAD:templates/index.html
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
 
 
+=======
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+    <script src="map.js"></script>
+</body>
+</html>
+
+>>>>>>> origin/michał-test:index.html
 
 
 

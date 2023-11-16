@@ -14,7 +14,9 @@ body {
 /*    background-attachment: fixed; !* Obrazek tła będzie nieruchomy przy przewijaniu strony *!*/
 /*}*/
 
-
+#infoTable .selectionCheckbox {
+    margin-right: 5px; /* Dodaje margines po prawej stronie dla odstępu */
+}
 
 .container {
     display: flex;

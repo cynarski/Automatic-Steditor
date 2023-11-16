@@ -1,7 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicjalizacja mapy
-    var map = L.map('map').setView([52.237049, 21.017532], 6); // Centrum Polski
-    var markers = []; // Tablica do przechowywania markerów
+    // Inicjalizacja mapy + blokowanie
+    var map = L.map('map', {
+    center: [52.237049, 19.517532], // Centrum mapy
+    zoom: 6, // Poziom przybliżenia
+    dragging: false, // Wyłączenie przeciągania
+    zoomControl: false, // Wyłączenie kontrolek zoomu
+    scrollWheelZoom: false, // Wyłączenie przybliżania kółkiem myszy
+    doubleClickZoom: false, // Wyłączenie przybliżania podwójnym kliknięciem
+
+});
+    var markers = [];
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

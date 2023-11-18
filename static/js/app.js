@@ -1,3 +1,5 @@
+let selections = []; // Teraz dane są przechowywane w pamięci, a nie w localStorage
+
 function saveCity() {
     const city = document.getElementById('citySelect').value;
     const productSelect = document.getElementById('productSelect');
@@ -9,19 +11,12 @@ function saveCity() {
     }
 
     const products = Array.from(productSelect.selectedOptions).map(option => option.value);
-
-    let selections = JSON.parse(localStorage.getItem('selections')) || [];
     selections.push({ city, products, weight });
-    localStorage.setItem('selections', JSON.stringify(selections));
-
     updateDisplay();
 }
 
-
 function updateDisplay() {
-    const selections = JSON.parse(localStorage.getItem('selections')) || [];
     const tableBody = document.getElementById('infoTable').getElementsByTagName('tbody')[0];
-
     tableBody.innerHTML = '';
 
     selections.forEach(selection => {
@@ -31,25 +26,25 @@ function updateDisplay() {
         let cellWeight = row.insertCell(2);
 
         cellCity.textContent = selection.city;
-        cellProduct.textContent = selection.products.join(', '); // Łączenie produktów w jeden ciąg tekstowy
+        cellProduct.textContent = selection.products.join(', ');
         cellWeight.textContent = selection.weight + ' t';
     });
 }
 
 function clearSelection() {
-    localStorage.removeItem('selections');
+    selections = []; // Czyści tablicę zamiast localStorage
     updateDisplay();
     document.getElementById('productImage').style.display = 'none';
-    if (window.clearMarkers)
-    {
+    if (window.clearMarkers) {
         window.clearMarkers();
     }
-
 }
+
 function clearEverything() {
     clearSelection();
     clearMarkers();
 }
 
-// updateDisplay();
-
+document.addEventListener('DOMContentLoaded', function() {
+    updateDisplay(); // Aktualizacja wyświetlania tabeli przy załadowaniu
+});

@@ -1,4 +1,3 @@
-
 function saveCity() {
     const city = document.getElementById('citySelect').value;
     const productSelect = document.getElementById('productSelect');
@@ -48,7 +47,7 @@ function clearSelection() {
 
 }
 function clearEverything() {
-    clearSelection(); // funkcja czyszcząca tabelę
+    clearSelection();
     clearMarkers();
 }
 

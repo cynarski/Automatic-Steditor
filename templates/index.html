@@ -85,11 +85,13 @@
 
     <div class="map-link">
         <button onclick="goToMapPage()">Przejdź do Mapy</button>
+        <button onclick="sendDataToPython()">Wyślij dane do Pythona</button>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/rest.js') }}"></script>
 </body>
 </html>
 

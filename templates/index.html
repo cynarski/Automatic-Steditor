@@ -32,9 +32,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wprowadzanie Miasta i Wybór Produktu</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Automatic Speditor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
 <body>
@@ -43,12 +42,28 @@
         <div class="left-panel">
             <select id="citySelect">
                 <option value="">Wybierz miasto</option>
+                <option value="Białystok">Białystok</option>
+                <option value="Białystok">Bydgoszcz</option>
+                <option value="Gdańsk">Gdańsk</option>
+                <option value="Gdynia">Gdynia</option>
+                <option value="Lublin">Lublin</option>
+                <option value="Łódź">Łódź</option>
+                <option value="Katowice">Katowice</option>
+                <option value="Kielce">Kielce</option>
                 <option value="Kraków">Kraków</option>
-                <option value="Warszawa">Warszawa</option>
-                <option value="Wroclaw">Wrocław</option>
-
-
+                <option value="Olsztyn">Olsztyn</option>
+                <option value="Opole">Opole</option>
+                <option value="Poznań">Poznań</option>
+                <option value="Radom">Radom</option>
+                <option value="Rzeszów">Rzeszów</option>
+                <option value="Sopot">Sopot</option>
+                <option value="Sosnowiec">Sosnowiec</option>
+                <option value="Szczecin">Szczecin</option>
+                <option value="Wrocław">Wrocław</option>
+                <option value="Zabrze">Zabrze</option>
+                <option value="Zielona Góra">Zielona Góra</option>
             </select><br>
+
             <select id="productSelect" multiple>
                 <option value="milk">Milk</option>
                 <option value="cheese">Cheese</option>
@@ -59,10 +74,12 @@
                 <option value="meat">Meat</option>
                 <option value="water">Water</option>
             </select><br>
+
             <input type="number" id="productWeight" placeholder="Waga produktu (t)"><br>
-            <button id="saveCityButton" onclick="saveCity()">Zapisz miasto</button>
-            <button onclick="clearEverything()">Wyczyść wybór</button>
-            <button onclick="clearMarkers()">Wyczyść mapę</button>
+            <input type="number" id="deliveryDeadline" placeholder="Deadline (days)"><br>
+            <button id="saveCityButton" onclick="saveCity()">Save city</button>
+            <button onclick="clearEverything()">Clear choice</button>
+            <button onclick="clearMarkers()">Clear map</button>
             <div id="map" class="map-container"></div>
         </div>
 
@@ -71,10 +88,10 @@
             <table id="infoTable">
                 <thead>
                     <tr>
-
                         <th>City</th>
                         <th>Product</th>
                         <th>Weight</th>
+                        <th>Deadline</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,8 +101,8 @@
     </div>
 
     <div class="map-link">
-        <button onclick="goToMapPage()">Przejdź do Mapy</button>
-        <button onclick="sendDataToPython()">Wyślij dane do Pythona</button>
+        <button id="goToMapButton">Move to results</button>
+        <button onclick="sendDataToPython()">Send data to Python</button>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>

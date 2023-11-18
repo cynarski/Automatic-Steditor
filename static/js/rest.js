@@ -24,7 +24,8 @@ function getTableData() {
         data.push({
             city: cells[0].textContent,
             products: cells[1].textContent.split(', '),
-            weight: cells[2].textContent
+            weight: cells[2].textContent,
+            deadline: cells[3].textContent
         });
     }
 

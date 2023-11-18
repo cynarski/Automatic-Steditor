@@ -4,14 +4,15 @@ function saveCity() {
     const city = document.getElementById('citySelect').value;
     const productSelect = document.getElementById('productSelect');
     const weight = document.getElementById('productWeight').value;
+    const deadline = document.getElementById('deliveryDeadline').value;
 
-    if (!city || productSelect.selectedOptions.length === 0 || !weight) {
-        alert("Proszę wybrać miasto, przynajmniej jeden produkt i wpisać wagę.");
+    if (!city || productSelect.selectedOptions.length === 0 || !weight || !deadline) {
+        alert("Proszę wybrać miasto, przynajmniej jeden produkt, wpisać wagę oraz ustawić termin dostawy.");
         return;
     }
 
     const products = Array.from(productSelect.selectedOptions).map(option => option.value);
-    selections.push({ city, products, weight });
+    selections.push({ city, products, weight, deadline }); // Dodaj 'deadline' do obiektu
     updateDisplay();
 }
 
@@ -24,10 +25,12 @@ function updateDisplay() {
         let cellCity = row.insertCell(0);
         let cellProduct = row.insertCell(1);
         let cellWeight = row.insertCell(2);
+        let cellDeadline = row.insertCell(3);
 
         cellCity.textContent = selection.city;
         cellProduct.textContent = selection.products.join(', ');
         cellWeight.textContent = selection.weight + ' t';
+        cellDeadline.textContent = selection.deadline + ' days'; // Poprawna linijka
     });
 }
 
@@ -47,4 +50,8 @@ function clearEverything() {
 
 document.addEventListener('DOMContentLoaded', function() {
     updateDisplay(); // Aktualizacja wyświetlania tabeli przy załadowaniu
+});
+
+document.getElementById('goToMapButton').addEventListener('click', function() {
+     window.location.href = '/map'; // Przekierowanie do trasy '/map' w Flask
 });

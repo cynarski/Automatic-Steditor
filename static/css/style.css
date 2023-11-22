@@ -7,14 +7,16 @@ body {
 }
 
 /*body {*/
-/*    background-image: url('images/background.jpg');*/
+/*    background-image: url('../images/background.jpg');*/
 /*    background-size: cover; !* Obrazek będzie skalowany, aby pokryć całą dostępną przestrzeń *!*/
 /*    background-position: center center; !* Obrazek będzie wyśrodkowany *!*/
 /*    background-repeat: no-repeat; !* Obrazek nie będzie się powtarzał *!*/
 /*    background-attachment: fixed; !* Obrazek tła będzie nieruchomy przy przewijaniu strony *!*/
 /*}*/
 
-
+#infoTable .selectionCheckbox {
+    margin-right: 5px; /* Dodaje margines po prawej stronie dla odstępu */
+}
 
 .container {
     display: flex;

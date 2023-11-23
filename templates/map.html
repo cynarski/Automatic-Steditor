@@ -4,17 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Trasy</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
     <style>
-        #map { height: 600px; }
+        #map { height: 800px;
+                width: 1400px;}
+
     </style>
 </head>
-<body>
-    <div id="map"></div>
+   <body>
+    <div id="content">
+        <div id="sidebar">
+
+            <table class="route-info-table">
+            </table>
+        </div>
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<!--    Dodadni linku do biblioteki-->
+<!--    Dodadnie linku do biblioteki-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
-    <script src="{{ url_for('static', filename='js/map_end.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/display.js') }}"></script>
+<!--    <script src="{{ url_for('static', filename='js/map_end.js') }}"></script>-->
+
 </body>
 </html>

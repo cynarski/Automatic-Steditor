@@ -15,18 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: JSON.stringify({ cities: selectedCities })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log('Otrzymane dane:', data);
-        if (typeof L.Routing === 'undefined' || typeof L.Routing.control === 'undefined') {
-        console.error('Biblioteka L.Routing nie jest zdefiniowana');
-        return;
-    }
         data.forEach(city => {
             var latLng = L.latLng(city.lat, city.lon);
             L.Routing.control({
@@ -34,11 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     L.latLng(52.237049, 21.017532), // Warszawa
                     latLng // Miasto docelowe
                 ],
-                routeWhileDragging: true
+                routeWhileDragging: true,
+                show: false // Ukrywa panel instrukcji trasy
             }).addTo(map);
         });
     })
-    .catch(error => {
-        console.error('Błąd podczas pobierania danych:', error);
-    });
+    .catch(error => console.error('Błąd:', error));
 });

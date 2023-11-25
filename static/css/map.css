@@ -1,27 +1,46 @@
-/* Dodaj do pliku CSS dla drugiej strony */
-.route-info-section {
-    width: 30%; /* Szerokość sekcji z danymi */
-    padding: 20px;
-    overflow-y: auto; /* Przewijanie, gdy jest za dużo zawartości */
-    border-right: 1px solid #ddd; /* Linia oddzielająca od mapy */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
 }
 
-.map-section {
-    width: 70%; /* Szerokość sekcji z mapą */
-    height: 100%;
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.left-panel {
+    width: 30%;
+    margin-right: 20px;
+}
+
+.right-panel {
+    width: 70%;
+}
+
+#map {
+    height: 500px;
+    width: calc(100% - 40px);
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .route-info-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Dodatkowy margines na górze tabeli */
+    margin-bottom: 20px;
 }
 
-/* Stylizacja tabeli zgodna z pierwszą stroną */
 .route-info-table th, .route-info-table td {
-    padding: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
     text-align: left;
-    border-bottom: 1px solid #ddd;
 }
 
 .route-info-table th {
@@ -29,10 +48,37 @@
     color: white;
 }
 
-.route-info-table tr:nth-child(even){
+.route-info-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+/*Usunięcie tabelki z mapy */
+.leaflet-routing-container {
+    display: none !important;
+}
 
-.route-info-table tr:hover {
-    background-color: #ddd;
+/* Responsywność */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .left-panel, .right-panel {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    #map {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    #map {
+        height: 300px;
+    }
+
+    .route-info-table th, .route-info-table td {
+        padding: 8px;
+    }
 }

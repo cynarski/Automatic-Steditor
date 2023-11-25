@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    var routeInfo = []; // Tutaj będziemy przechowywać informacje o trasach
+    var routeInfo = [];
     var selectedCities = JSON.parse(localStorage.getItem('selectedCities')) || [];
 
     fetch('/filter-cities', {
@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var cityLatLng = L.latLng(cityData.lat, cityData.lon);
             L.Routing.control({
                 waypoints: [
-                    L.latLng(52.237049, 21.017532), // Warszawa
-                    cityLatLng // Miasto docelowe
+                    L.latLng(52.237049, 21.017532),
+                    cityLatLng
                 ],
                 routeWhileDragging: false,
                 show: false, // Ukrywa panel instrukcji trasy
@@ -39,13 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .on('routesfound', function (e) {
                 var routes = e.routes;
                 var summary = routes[0].summary;
-                // Możesz teraz dodać informacje o trasie do tablicy
                 routeInfo.push({
                     distance: summary.totalDistance,
                     time: summary.totalTime,
                     name: cityData.city
                 });
-                // Aktualizacja tabeli z nowymi danymi
                 updateRouteTable(routeInfo);
             })
             .addTo(map);
@@ -56,16 +54,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateRouteTable(routeInfo) {
-        // Pobranie referencji do tabeli
-        const table = document.querySelector('.route-info-table');
-        table.innerHTML = ''; // Wyczyszczenie tabeli
+        const table = document.querySelector('#result-table');
+        table.innerHTML = '';
 
-        // Dodawanie informacji o trasach do tabeli
         routeInfo.forEach(info => {
             let row = table.insertRow();
             row.insertCell(0).textContent = info.name;
-            row.insertCell(1).textContent = (info.distance / 1000).toFixed(2) + ' km'; // Konwersja na kilometry
-            row.insertCell(2).textContent = (info.time / 3600).toFixed(2) + ' h'; // Konwersja na godziny
+            row.insertCell(1).textContent = (info.distance / 1000).toFixed(2) + ' km';
+            row.insertCell(2).textContent = (info.time / 3600).toFixed(2) + ' h';
         });
     }
 });

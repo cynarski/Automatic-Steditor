@@ -6,29 +6,15 @@ body {
     background-color: #f4f4f4;
 }
 
-/*body {*/
-/*    background-image: url('../images/background.jpg');*/
-/*    background-size: cover; !* Obrazek będzie skalowany, aby pokryć całą dostępną przestrzeń *!*/
-/*    background-position: center center; !* Obrazek będzie wyśrodkowany *!*/
-/*    background-repeat: no-repeat; !* Obrazek nie będzie się powtarzał *!*/
-/*    background-attachment: fixed; !* Obrazek tła będzie nieruchomy przy przewijaniu strony *!*/
-/*}*/
-
-#infoTable .selectionCheckbox {
-    margin-right: 5px; /* Dodaje margines po prawej stronie dla odstępu */
-}
-
 .container {
     display: flex;
-    align-items: stretch; /* Zapewnia, że dzieci diva mają tę samą wysokość */
+    align-items: stretch;
 }
-
 
 .left-panel, .right-panel {
     flex: 1;
     margin: 20px;
     padding: 10px;
-    /* Stylizacja dla lewego i prawego panelu bez tła, zaokrągleń i cienia */
 }
 
 #productImage {
@@ -69,7 +55,7 @@ table {
 th, td {
     padding: 8px;
     text-align: left;
-    border-bottom: 1px solid #ddd; /* Tylko dolna linia dla oddzielenia wierszy */
+    border-bottom: 1px solid #ddd;
 }
 
 th {
@@ -89,7 +75,6 @@ tr:hover {
     background-color: #ddd;
 }
 
-
 .map-container {
     height: 500px;
     width: calc(100% - 40px);
@@ -108,4 +93,45 @@ select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-panel, .right-panel {
+        margin: 10px;
+        padding: 5px;
+        width: auto;
+    }
+
+    .map-container {
+        height: 300px;
+    }
+
+    .map-link {
+        position: static;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .left-panel, .right-panel {
+        margin: 5px;
+    }
+
+    .map-container {
+        height: 200px;
+    }
+
+    button, input[type="text"], select, input[type="number"] {
+        padding: 8px;
+        margin-bottom: 5px;
+    }
 }

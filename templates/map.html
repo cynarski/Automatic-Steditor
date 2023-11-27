@@ -5,14 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Trasy</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #map { height: 600px; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+
 </head>
 <body>
-    <div id="map"></div>
-
+    <div class="container">
+        <div class="left-panel">
+            <h2>Informacje o trasie</h2>
+            <table id="result-table" class="route-info-table">
+                <!-- Dane trasy będą wstawiane tutaj -->
+            </table>
+        </div>
+        <div class="right-panel">
+            <div id="map"></div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/display.js') }}"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="../static/js/map.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
+
+<!--    <script src="{{ url_for('static', filename='js/map_end.js') }}"></script>-->
+
 </body>
 </html>

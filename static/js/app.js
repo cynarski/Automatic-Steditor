@@ -52,6 +52,14 @@ document.addEventListener('DOMContentLoaded', function() {
     updateDisplay(); // Aktualizacja wyświetlania tabeli przy załadowaniu
 });
 
+// Dodaj tę funkcję do app.js
+function saveCitiesToLocalStorage() {
+    const selectedCities = selections.map(selection => selection.city);
+    localStorage.setItem('selectedCities', JSON.stringify(selectedCities));
+}
+
 document.getElementById('goToMapButton').addEventListener('click', function() {
-     window.location.href = '/map'; // Przekierowanie do trasy '/map' w Flask
+    saveCitiesToLocalStorage(); // Zapisz miasta przed przekierowaniem
+    window.location.href = '/map';
 });
+

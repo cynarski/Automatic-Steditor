@@ -1,1 +1,0 @@
-# Tutaj bedzie nasz skrypcik pythonowy do przeprowadzenia algorytmu

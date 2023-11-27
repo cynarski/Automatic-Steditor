@@ -1,30 +1,38 @@
+# nie wiem czy jest to wszystko potrzebne, mozna sprobowac usunac postgres i pgadmin a zostawic w services tylko pythona
+
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16
-    restart: always
-    environment:
-      - POSTGRES_USER=b.barszczak35%40gmail.com
-      - POSTGRES_PASSWORD=Cib02anYPEqf
-      - POSTGRES_DB=AutomaticSteditor
+  web-python_main:
+    restart: on-failure
+    build: .
     ports:
-      - "5432:5432"
-    networks:
-      - pg_network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
+      - "5000:80"
     environment:
-      - PGADMIN_DEFAULT_EMAIL=badanka@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=badania2023
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
-    networks:
-      - pg_network
+      DATABASE_URL: 'postgresql://b.barszczak35%40gmail.com:Cib02anYPEqf@ep-floral-breeze-43648026.eu-central-1.aws.neon.tech/AutomaticSteditor?sslmode=require'
 
-networks:
-  pg_network:
+#  postgres:
+#    image: postgres:16
+#    restart: always
+#    environment:
+#      - POSTGRES_USER=b.barszczak35%40gmail.com
+#      - POSTGRES_PASSWORD=Cib02anYPEqf
+#      - POSTGRES_DB=AutomaticSteditor
+#    networks:
+#      - pg_network
+
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    restart: always
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=badanka@gmail.com
+#      - PGADMIN_DEFAULT_PASSWORD=badania2023
+#    ports:
+#      - "5050:80"
+#    depends_on:
+#      - postgres
+#    networks:
+#      - pg_network
+#
+#networks:
+#  pg_network:

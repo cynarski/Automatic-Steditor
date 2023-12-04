@@ -22,10 +22,13 @@ body {
     width: 70%;
 }
 
+
+.leaflet-routing-container {
+    display: none !important;
+}
+
 #map {
-    height: 500px;
-    width: calc(100% - 40px);
-    margin: 20px;
+    height: 600px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -51,9 +54,41 @@ body {
 .route-info-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
-/*Usunięcie tabelki z mapy */
-.leaflet-routing-container {
-    display: none !important;
+
+#left-panel {
+    width: 30%; /* lub dowolna inna wartość */
+    float: left;
+}
+
+#right-panel {
+    width: 70%; /* lub dowolna inna wartość */
+    float: right;
+}
+
+#map {
+    height: 600px; /* wysokość mapy */
+}
+
+/* Stylizacja tabeli */
+.route-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.route-info-table th,
+.route-info-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.route-info-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.route-info-table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
 /* Responsywność */
@@ -82,3 +117,5 @@ body {
         padding: 8px;
     }
 }
+
+

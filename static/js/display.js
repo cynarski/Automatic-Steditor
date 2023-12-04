@@ -65,9 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Błąd podczas pobierania danych:', error);
     });
 
+
     function updateRouteTable(routeInfo) {
-        const tableBody = document.querySelector('#route-info-table tbody');
-        tableBody.innerHTML = ''; // Wyczyść obecne wiersze
+        const tableBody = document.querySelector('#result-table tbody');
+        tableBody.innerHTML = ''; // Clear current rows
 
         routeInfo.forEach(info => {
             let row = tableBody.insertRow();
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let cellTime = row.insertCell(2);
 
             cellCity.textContent = info.name;
+            // Convert meters to kilometers and seconds to hours
             cellDistance.textContent = (info.distance / 1000).toFixed(2) + ' km';
             cellTime.textContent = (info.time / 3600).toFixed(2) + ' h';
         });

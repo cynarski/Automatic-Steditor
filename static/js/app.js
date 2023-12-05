@@ -60,13 +60,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Dodaj tę funkcję do app.js
 function saveCitiesToLocalStorage() {
     const selectedCities = selections.map(selection => selection.city);
     localStorage.setItem('selectedCities', JSON.stringify(selectedCities));
 }
 
+
+
 document.getElementById('goToMapButton').addEventListener('click', function() {
-    saveCitiesToLocalStorage();
-    window.location.href = '/map';
+    document.getElementById('loadingSpinner').style.display = 'block';
+
+    setTimeout(function() {
+        saveCitiesToLocalStorage();
+        window.location.href = '/map';
+    }, 5000)
+    this.disabled = true;
 });
+

@@ -12,8 +12,11 @@ function saveCity() {
     }
 
     const products = Array.from(productSelect.selectedOptions).map(option => option.value);
-    selections.push({ city, products, weight, deadline }); // Dodaj 'deadline' do obiektu
+    selections.push({ city, products, weight, deadline });
     updateDisplay();
+
+    // Zapisywanie danych w localStorage
+    localStorage.setItem('selections', JSON.stringify(selections));
 }
 
 function updateDisplay() {
@@ -30,12 +33,12 @@ function updateDisplay() {
         cellCity.textContent = selection.city;
         cellProduct.textContent = selection.products.join(', ');
         cellWeight.textContent = selection.weight + ' t';
-        cellDeadline.textContent = selection.deadline + ' days'; // Poprawna linijka
+        cellDeadline.textContent = selection.deadline + ' days';
     });
 }
 
 function clearSelection() {
-    selections = []; // Czyści tablicę zamiast localStorage
+    selections = [];
     updateDisplay();
     document.getElementById('productImage').style.display = 'none';
     if (window.clearMarkers) {
@@ -49,7 +52,12 @@ function clearEverything() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    updateDisplay(); // Aktualizacja wyświetlania tabeli przy załadowaniu
+    // Wczytywanie danych z localStorage i aktualizacja wyświetlania tabeli
+    const storedSelections = localStorage.getItem('selections');
+    if (storedSelections) {
+        selections = JSON.parse(storedSelections);
+        updateDisplay();
+    }
 });
 
 // Dodaj tę funkcję do app.js
@@ -59,7 +67,6 @@ function saveCitiesToLocalStorage() {
 }
 
 document.getElementById('goToMapButton').addEventListener('click', function() {
-    saveCitiesToLocalStorage(); // Zapisz miasta przed przekierowaniem
+    saveCitiesToLocalStorage();
     window.location.href = '/map';
 });
-

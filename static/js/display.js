@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
    var map = L.map('map', {
-        center: [52.237049, 21.017532], // Ustawienie centrum mapy na Warszawę
+        center: [52.237049, 20.017532], // Ustawienie centrum mapy na Warszawę
         zoom: 6, // Ustawienie początkowego zoomu mapy
         dragging: false, // Wyłączenie możliwości przeciągania mapy
         touchZoom: false, // Wyłączenie zoomowania dotykiem

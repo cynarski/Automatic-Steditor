@@ -95,6 +95,9 @@ select {
     margin-bottom: 10px;
 }
 
+
+
+
 /* Responsywność */
 @media (max-width: 768px) {
     .container {

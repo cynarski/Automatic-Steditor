@@ -5,23 +5,46 @@ body {
     box-sizing: border-box;
     background-color: #f4f4f4;
 }
+button {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 .container {
     display: flex;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     align-items: flex-start;
     padding: 20px;
+    box-sizing: border-box;
 }
 
-.left-panel {
-    width: 30%;
-    margin-right: 20px;
-}
 
+.left-panel,
 .right-panel {
-    width: 70%;
+    flex: 1;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 20px;
+
 }
 
+.back-to-home {
+    position: absolute; /* Pozycjonowanie absolutne */
+    bottom: 10px; /* Odstęp od dolnej krawędzi .left-panel */
+    left: 10px; /* Odstęp od lewej krawędzi .left-panel */
+    padding: 10px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
 .leaflet-routing-container {
     display: none !important;
@@ -55,18 +78,9 @@ body {
     background-color: #f2f2f2;
 }
 
-#left-panel {
-    width: 30%; /* lub dowolna inna wartość */
-    float: left;
-}
-
-#right-panel {
-    width: 70%; /* lub dowolna inna wartość */
-    float: right;
-}
 
 #map {
-    height: 600px; /* wysokość mapy */
+    height: 500px;
 }
 
 /* Stylizacja tabeli */
@@ -90,6 +104,10 @@ body {
 .route-info-table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+
+
+
 
 /* Responsywność */
 @media (max-width: 768px) {

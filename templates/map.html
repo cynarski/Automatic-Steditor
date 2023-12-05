@@ -24,17 +24,18 @@
             <!-- Wiersze tabeli zostaną dodane dynamicznie -->
             </tbody>
             </table>
-
+             <button onclick="returnToHome()" class="back-to-home">Wróć do strony głównej</button>
         </div>
         <div class="right-panel">
             <div id="map"></div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/display.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/result_app.js') }}"></script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.min.js"></script>
 
-<!--    <script src="{{ url_for('static', filename='js/map_end.js') }}"></script>-->
+
 
 </body>
 </html>

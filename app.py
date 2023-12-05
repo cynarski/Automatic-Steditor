@@ -43,7 +43,7 @@ def index():
 
 @app.route('/map')
 def map_page():
-    return render_template(map_path)
+    return render_template('map.html')
 
 
 def run_all():

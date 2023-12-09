@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inicjalizacja mapy + blokowanie
     var map = L.map('map', {
-    center: [52.237049, 19.517532], // Centrum mapy
-    zoom: 6, // Poziom przybliżenia
-    dragging: false, // Wyłączenie przeciągania
-    zoomControl: false, // Wyłączenie kontrolek zoomu
-    scrollWheelZoom: false, // Wyłączenie przybliżania kółkiem myszy
-    doubleClickZoom: false, // Wyłączenie przybliżania podwójnym kliknięciem
-
-});
+        center: [52.237049, 19.517532], // Centrum mapy
+        zoom: 6, // Poziom przybliżenia
+        dragging: false, // Wyłączenie przeciągania
+        zoomControl: false, // Wyłączenie kontrolek zoomu
+        scrollWheelZoom: false, // Wyłączenie przybliżania kółkiem myszy
+        doubleClickZoom: false, // Wyłączenie przybliżania podwójnym kliknięciem
+    });
     var markers = [];
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -19,6 +18,25 @@ document.addEventListener('DOMContentLoaded', function() {
     function addCityMarker(lat, lon) {
         var marker = L.marker([lat, lon]).addTo(map);
         markers.push(marker);
+
+        // Zapisywanie znaczników w localStorage
+        saveMarkersToLocalStorage();
+    }
+
+    function saveMarkersToLocalStorage() {
+        var markersData = markers.map(marker => {
+            return { lat: marker.getLatLng().lat, lon: marker.getLatLng().lng };
+        });
+        localStorage.setItem('markers', JSON.stringify(markersData));
+    }
+
+    function loadMarkersFromLocalStorage() {
+        var markersData = JSON.parse(localStorage.getItem('markers'));
+        if (markersData) {
+            markersData.forEach(data => {
+                addCityMarker(data.lat, data.lon);
+            });
+        }
     }
 
     function findCity(cityName) {
@@ -47,8 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
             map.removeLayer(marker);
         });
         markers = [];
-    };
 
+        // Czyszczenie znaczników z localStorage
+        localStorage.removeItem('markers');
+    };
 
     document.getElementById('saveCityButton').addEventListener('click', function() {
         var cityName = document.getElementById('citySelect').value;
@@ -56,4 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             findCity(cityName);
         }
     });
+
+    // Wczytywanie znaczników z localStorage
+    loadMarkersFromLocalStorage();
 });

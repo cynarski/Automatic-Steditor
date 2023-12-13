@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inicjalizacja mapy + blokowanie
     var map = L.map('map', {
-    center: [52.237049, 19.517532], // Centrum mapy
-    zoom: 6, // Poziom przybliżenia
-    dragging: false, // Wyłączenie przeciągania
-    zoomControl: false, // Wyłączenie kontrolek zoomu
-    scrollWheelZoom: false, // Wyłączenie przybliżania kółkiem myszy
-    doubleClickZoom: false, // Wyłączenie przybliżania podwójnym kliknięciem
-
-});
+        center: [52.237049, 19.517532], // Centrum mapy
+        zoom: 6, // Poziom przybliżenia
+        dragging: false, // Wyłączenie przeciągania
+        zoomControl: false, // Wyłączenie kontrolek zoomu
+        scrollWheelZoom: false, // Wyłączenie przybliżania kółkiem myszy
+        doubleClickZoom: false, // Wyłączenie przybliżania podwójnym kliknięciem
+    });
     var markers = [];
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -16,13 +15,30 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Funkcja dodająca marker na mapie
     function addCityMarker(lat, lon) {
         var marker = L.marker([lat, lon]).addTo(map);
-        markers.push(marker); // Dodaj marker do tablicy
+        markers.push(marker);
+
+        // Zapisywanie znaczników w localStorage
+        saveMarkersToLocalStorage();
     }
 
-    // Funkcja do wyszukiwania miasta i dodawania markera
+    function saveMarkersToLocalStorage() {
+        var markersData = markers.map(marker => {
+            return { lat: marker.getLatLng().lat, lon: marker.getLatLng().lng };
+        });
+        localStorage.setItem('markers', JSON.stringify(markersData));
+    }
+
+    function loadMarkersFromLocalStorage() {
+        var markersData = JSON.parse(localStorage.getItem('markers'));
+        if (markersData) {
+            markersData.forEach(data => {
+                addCityMarker(data.lat, data.lon);
+            });
+        }
+    }
+
     function findCity(cityName) {
         var encodedCityName = encodeURIComponent(cityName);
 
@@ -33,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     var info = data[0];
                     var lat = parseFloat(info.lat);
                     var lon = parseFloat(info.lon);
-                    addCityMarker(lat, lon); // Dodaj marker bez zmiany zoomu lub centrowania
+                    addCityMarker(lat, lon);
                 } else {
                     alert("Nie znaleziono miasta.");
                 }
@@ -44,19 +60,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Funkcja do czyszczenia wszystkich markerów z mapy
     window.clearMarkers = function() {
         markers.forEach(function(marker) {
             map.removeLayer(marker);
         });
-        markers = []; // Resetowanie tablicy markerów
+        markers = [];
+
+        // Czyszczenie znaczników z localStorage
+        localStorage.removeItem('markers');
     };
 
-    // Nasłuchiwacz zdarzeń dla przycisku "Zapisz miasto"
     document.getElementById('saveCityButton').addEventListener('click', function() {
         var cityName = document.getElementById('citySelect').value;
         if (cityName) {
             findCity(cityName);
         }
     });
+
+    // Wczytywanie znaczników z localStorage
+    loadMarkersFromLocalStorage();
 });

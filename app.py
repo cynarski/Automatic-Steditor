@@ -22,7 +22,9 @@ def filter_cities():
     for city_name in data.get('cities', []):
         lat, lon = get_lat_lon_from_city_name(city_name)
         if lat and lon:
-            cities_data.append({"lat": lat, "lon": lon})
+            cities_data.append({"city": city_name, "lat": lat, "lon": lon})
+    print(cities_data)
+    print(jsonify(cities_data))
     return jsonify(cities_data)
 
 def get_lat_lon_from_city_name(city_name):
@@ -43,7 +45,7 @@ def index():
 
 @app.route('/map')
 def map_page():
-    return render_template(map_path)
+    return render_template('map.html')
 
 
 def run_all():

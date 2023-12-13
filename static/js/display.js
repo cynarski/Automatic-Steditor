@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var map = L.map('map').setView([52.237049, 21.017532], 6);
+   var map = L.map('map', {
+        center: [52.237049, 20.017532], // Ustawienie centrum mapy na Warszawę
+        zoom: 6, // Ustawienie początkowego zoomu mapy
+        dragging: false, // Wyłączenie możliwości przeciągania mapy
+        touchZoom: false, // Wyłączenie zoomowania dotykiem
+        scrollWheelZoom: false, // Wyłączenie zoomowania kółkiem myszy
+        doubleClickZoom: false, // Wyłączenie zoomowania podwójnym kliknięciem
+        zoomControl: false, // Wyłączenie kontrolek zoomu
+        boxZoom: false, // Wyłączenie zoomowania prostokątem wybieranym przez użytkownika
+        keyboard: false // Wyłączenie obsługi klawiatury
+    });
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
@@ -34,7 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 show: false, // Ukrywa panel instrukcji trasy
                 createMarker: function (i, waypoint) {
                     return L.marker(waypoint.latLng).bindPopup(cityData.city);
-                }
+                },
+                fitSelectedRoutes: false,
             })
             .on('routesfound', function (e) {
                 var routes = e.routes;
@@ -53,15 +65,21 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Błąd podczas pobierania danych:', error);
     });
 
+
     function updateRouteTable(routeInfo) {
-        const table = document.querySelector('#result-table');
-        table.innerHTML = '';
+        const tableBody = document.querySelector('#result-table tbody');
+        tableBody.innerHTML = ''; // Clear current rows
 
         routeInfo.forEach(info => {
-            let row = table.insertRow();
-            row.insertCell(0).textContent = info.name;
-            row.insertCell(1).textContent = (info.distance / 1000).toFixed(2) + ' km';
-            row.insertCell(2).textContent = (info.time / 3600).toFixed(2) + ' h';
+            let row = tableBody.insertRow();
+            let cellCity = row.insertCell(0);
+            let cellDistance = row.insertCell(1);
+            let cellTime = row.insertCell(2);
+
+            cellCity.textContent = info.name;
+            // Convert meters to kilometers and seconds to hours
+            cellDistance.textContent = (info.distance / 1000).toFixed(2) + ' km';
+            cellTime.textContent = (info.time / 3600).toFixed(2) + ' h';
         });
     }
 });

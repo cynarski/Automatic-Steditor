@@ -4,6 +4,8 @@
 # docker-compose up -d
 from flask import Flask, render_template, jsonify, request
 import requests
+import solve_engine
+
 index_path = 'index.html'
 map_path = 'map.html'
 app = Flask(__name__)
@@ -11,9 +13,11 @@ app = Flask(__name__)
 
 @app.route('/process-data', methods=['POST'])
 def process_data():
-    data = request.json
-    print(data)
-    return jsonify(data)
+    services = request.json
+    solve_engine.find_solution(services)
+
+    return jsonify(services)
+
 
 @app.route('/filter-cities', methods=['POST'])
 def filter_cities():
@@ -25,8 +29,8 @@ def filter_cities():
             cities_data.append({"lat": lat, "lon": lon})
     return jsonify(cities_data)
 
+
 def get_lat_lon_from_city_name(city_name):
-    # Upewnij się, że klucz API jest poprawny i dodany do URL
     url = f"https://nominatim.openstreetmap.org/search?city={city_name}&format=json"
     response = requests.get(url)
     if response.status_code == 200:
@@ -34,6 +38,7 @@ def get_lat_lon_from_city_name(city_name):
         if results:
             return results[0]['lat'], results[0]['lon']
     return None, None
+
 
 # Display front page
 @app.route('/')
@@ -47,4 +52,4 @@ def map_page():
 
 
 def run_all():
-    app.run(host="0.0.0.0", port=80, debug=True)
+    app.run(host="127.152.0.1", port=80, debug=True)

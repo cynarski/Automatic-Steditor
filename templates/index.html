@@ -13,7 +13,7 @@
 
         <div class="left-panel">
             <select id="citySelect">
-                <option value="">Wybierz miasto</option>
+                <option value="">Choose city</option>
                 <option value="Białystok">Białystok</option>
                 <option value="Białystok">Bydgoszcz</option>
                 <option value="Gdańsk">Gdańsk</option>
@@ -78,34 +78,35 @@
               </div>
               <p class="parameter-name" id="selection">Selection size</p>
               <div class="input-container">
-                <input type="range" class="range-input" min="5" max="500" step="1">
-                <input type="number" class="number-input" min="5" max="500" step="1">
+                <input type="range" class="range-input selection-size" min="5" max="500" step="1">
+                <input type="number" class="number-input selection-size" min="5" max="500" step="1">
               </div>
               <p class="parameter-name">Crossover rate</p>
               <div class="input-container">
-                <input type="range" class="range-input" min="0" max="1" step="0.01">
-                <input type="number" class="number-input" min="0" max="1" step="0.01">
+                <input type="range" class="range-input crossover-rate" min="0" max="1" step="0.01">
+                <input type="number" class="number-input crossover-rate" min="0" max="1" step="0.01">
               </div>
               <p class="parameter-name">Mutation rate</p>
               <div class="input-container">
-                <input type="range" class="range-input" min="0" max="1" step="0.01">
-                <input type="number" class="number-input" min="0" max="1" step="0.01">
+                <input type="range" class="range-input mutation-rate" min="0" max="1" step="0.01">
+                <input type="number" class="number-input mutation-rate" min="0" max="1" step="0.01">
               </div>
               <p class="parameter-name">Pay rate</p>
               <div class="input-container">
-                <input type="range" class="range-input" min="0" max="1000" step="0.01">
-                <input type="number" class="number-input" min="0" max="1000" step="0.01">
+                <input type="range" class="range-input pay-rate" min="0" max="1000" step="0.01">
+                <input type="number" class="number-input pay-rate" min="0" max="1000" step="0.01">
               </div>
               <p class="parameter-name">Visited cities limit</p>
               <div class="input-container">
-                <input type="range" class="range-input" min="1" max="10" step="1">
-                <input type="number" class="number-input" min="1" max="10" step="1">
+                <input type="range" class="range-input visited-cities-limit" min="1" max="10" step="1">
+                <input type="number" class="number-input visited-cities-limit" min="1" max="10" step="1">
               </div>
            </div>
 
             <div class="map-link">
-                <button id="goToMapButton">Move to results</button>
-                <div class="spinner"></div>
+                <button onclick="sendDataToPython()">Send data to Python</button>
+                <button id="goToMapButton"  onclick="sendDataToPython()">Move to results</button>
+                <div class="spinner" id="loadingSpinner"></div>
             </div>
 
 
@@ -121,7 +122,7 @@
     <script src="{{ url_for('static', filename='js/map.js') }}"></script>
     <script src="{{ url_for('static', filename='js/algorithm_params.js') }}"></script>
     <script src="{{ url_for('static', filename='js/products_table.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/rest.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/rest.js') }}"></script>
 </body>
 </html>
 

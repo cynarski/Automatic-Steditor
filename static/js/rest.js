@@ -1,19 +1,3 @@
-function sendDataToPython() {
-    const tableData = getTableData();
-
-    fetch('/process-data', {
-        method: 'POST',
-        headers : {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tableData)
-    })
-        .then(response => response.json())
-        .then(data => console.log('Odpowiedz z pythona', data))
-        .catch(error => console.error('Błąd', error));
-}
-
-
 function getTableData() {
     const table = document.getElementById('infoTable');
     const rows = table.getElementsByTagName('tr');

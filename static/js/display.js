@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-   var map = L.map('map', {
+    let map = L.map('map', {
         center: [52.237049, 20.017532], // Ustawienie centrum mapy na Warszawę
         zoom: 6, // Ustawienie początkowego zoomu mapy
         dragging: false, // Wyłączenie możliwości przeciągania mapy
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    var routeInfo = [];
-    var selectedCities = JSON.parse(localStorage.getItem('selectedCities')) || [];
+    let routeInfo = [];
+    let selectedCities = JSON.parse(localStorage.getItem('selectedCities')) || [];
 
     fetch('/filter-cities', {
         method: 'POST',
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         console.log('Otrzymane dane:', data);
         data.forEach(cityData => {
-            var cityLatLng = L.latLng(cityData.lat, cityData.lon);
+            let cityLatLng = L.latLng(cityData.lat, cityData.lon);
             L.Routing.control({
                 waypoints: [
                     L.latLng(52.237049, 21.017532),
@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 fitSelectedRoutes: false,
             })
             .on('routesfound', function (e) {
-                var routes = e.routes;
-                var summary = routes[0].summary;
+                let routes = e.routes;
+                let summary = routes[0].summary;
                 routeInfo.push({
                     distance: summary.totalDistance,
                     time: summary.totalTime,

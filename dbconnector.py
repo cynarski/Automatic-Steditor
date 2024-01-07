@@ -2,7 +2,7 @@
 
 # todo dodac mozliwosc dodawania rekordow do tabeli
 
-from psycopg2 import connect
+from psycopg2 import connect, OperationalError
 from typing import List
 
 # Konfiguracja do polaczenia z nasza baza danych
@@ -50,3 +50,11 @@ def dbGetQuery(connection, query: str) -> List:
     cursor.close()
 
     return result
+
+
+def dbAddRecord(connection, query: str) -> None:
+    cursor = connection.cursor()
+
+    cursor.execute(query)
+
+    cursor.close()

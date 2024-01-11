@@ -1,0 +1,98 @@
+    # def check_correctness(self, task: Task):
+    #     # (task.genome_size - task.no_of_trucks) // task.no_of_cities_connections
+    #     for i in range(task.no_of_trucks):
+    #         index = task.no_of_trucks + i * task.no_of_cities_connections
+    #         part_genome = self.genome[index:index + task.no_of_cities_connections]
+    #         visited = 0
+    #         has_start = False
+    #
+    #         for j in range(task.no_of_cities_connections // task.no_of_cities):
+    #             if self.genome[i] == 0:
+    #                 continue
+    #             start = j * task.no_of_cities
+    #             more_than_one = 0
+    #             for k in range(task.no_of_cities):
+    #                 if part_genome[start + k] == 1:
+    #                     visited += 1
+    #                     more_than_one += 1
+    #
+    #                     if more_than_one > 1:
+    #                         self.is_correct = False
+    #                         return
+    #
+    #                     if visited > task.visited_cities_limit + 1:
+    #                         self.is_correct = False
+    #                         return
+    #
+    #         # if not has_start:
+    #         #     self.is_correct = False
+    #         #     return
+    #
+    # def evaluate(self, task: Task, services: Services, trucks: List[Truck]):
+    #     if self.is_correct is False:
+    #         self.fitness = incorrect_fitness
+    #         return self.fitness
+    #
+    #     all_distances = []
+    #     for i in range(self.trucks_length):
+    #         if self.genome[i] == 0:
+    #             continue
+    #         distance_helper = 0
+    #         index = task.no_of_trucks + i * task.no_of_cities_connections
+    #         part_genome = np.array(self.genome[index:index + task.no_of_cities_connections])
+    #         track, self.is_correct, counter = build_track(part_genome, services)
+    #
+    #         if self.is_correct is False:
+    #             self.fitness = incorrect_fitness
+    #             return self.fitness
+    #
+    #         # # sprawdzanie ilosci miast
+    #         track = track.split('-')
+    #         # if len(track) != counter:
+    #         #     self.is_correct = False
+    #         #     self.fitness = incorrect_fitness
+    #         #     return self.fitness
+    #
+    #         # pobieranie dlugosci drog
+    #         for j in range(len(track) - 1):
+    #             city1 = track[j]
+    #             city2 = track[j + 1]
+    #             distance_helper += find_distance(city1, city2, services.cities_connections)
+    #
+    #         # sprawdzanie wagi ciezarowki
+    #         current_weight = 0
+    #         for j in range(1, len(track) - 1):
+    #             city = track[j]
+    #             service = services.get_service(city)
+    #             current_weight += service.weight
+    #
+    #         if current_weight > trucks[i].cargo:
+    #             self.is_correct = False
+    #             self.fitness = incorrect_fitness
+    #             return self.fitness
+    #
+    #         all_distances.append(distance_helper)
+    #
+    #     evaluation = 0
+    #     for i in range(task.no_of_trucks):
+    #         if self.genome[i] == 0:
+    #             continue
+    #         distance = all_distances[i]
+    #         truck = trucks[i]
+    #         evaluation += (distance / truck.velocity) * (distance * truck.burning + task.pay_rate)
+    #
+    #     if evaluation == 0:
+    #         self.is_correct = False
+    #         self.fitness = incorrect_fitness
+    #         return self.fitness
+    #
+    #     unused_trucks = task.no_of_trucks - np.count_nonzero(self.genome[0:task.no_of_trucks])
+    #     if unused_trucks == task.no_of_trucks:
+    #         self.is_correct = False
+    #         self.fitness = incorrect_fitness
+    #         return self.fitness
+    #
+    #     self.fitness = evaluation  # co sie stanie?
+    #     self.fitness -= unused_trucks * 60
+    #
+    #     return self.fitness

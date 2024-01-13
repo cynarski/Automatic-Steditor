@@ -1,17 +1,21 @@
 # Tutaj bedzie nasz skrypcik pythonowy do przeprowadzenia algorytmu
 
+# todo co zrobic
+# fixme 1 zrobic tak ze jak ciezarowka ma 0 to cala jej trasa jest 0 (przebadac mutowowanie) --- KRZYZOWANIE POPRAWIONE
+# fixme 2 zrobic mechanizm dywersyfikacji --- ZROBIONE
+# fixme 3 zrobic mechanizm elitaryzmu --- ZROBIONE
 
 import numpy as np
-import dbconnector
 import matplotlib.pyplot as plt
 
 from typing import List, Tuple
 import random
 import copy
 
+import dbconnector
 import nointernethelpers
 
-incorrect_fitness = 100000
+incorrect_fitness = 30000
 
 
 class Truck:
@@ -142,7 +146,6 @@ class Genome:
 
             start = task.no_of_trucks + i * task.no_of_cities_connections
             part_genome = self.genome[start:start + task.no_of_cities_connections]
-            visited_cities = 0
 
             for j in range(task.no_of_cities_connections // task.no_of_cities):
                 start_index = j * task.no_of_cities
@@ -158,18 +161,12 @@ class Genome:
 
                 for k in range(0, task.no_of_cities):
                     if part_genome[start_index + k] == 1:
-                        visited_cities += 1
                         superposition += 1
 
                 # sprawdzanie czy wyjezdza do wiecej niz 1 miasto jednoczesnie
                 if superposition > 1:
                     self.is_correct = False
                     return
-
-            # sprawdzanie czy odwiedza wiecej miast niz jest limit
-            if visited_cities > task.visited_cities_limit + 1:
-                self.is_correct = False
-                return
 
             # budowanie trasy
             track, has_end, used_cities = build_track(part_genome, services)
@@ -180,7 +177,12 @@ class Genome:
                 self.is_correct = False
                 return
 
-            # sprawdzanie czy odwiedza wszystkie miasta ktore ma w trasie
+            # sprawdzanie czy nie odwiedza wiecej miast niz jest limit
+            if len(track) - 2 > task.visited_cities_limit:
+                self.is_correct = False
+                return
+
+                # sprawdzanie czy odwiedza wszystkie miasta ktore ma w trasie
             if len(track) != used_cities:
                 self.is_correct = False
                 return
@@ -197,12 +199,13 @@ class Genome:
                 self.is_correct = False
                 return
 
+        # fixme albo to ograniczenie jest zwalone albo mega trudno znalezc rozwiazanie
         # sprawdzanie czy niepotrzebine puszcza jeszcze raz ciezarowke do miasta ktore zostalo odwiedzone
         # if len(all_cities) != task.no_of_cities:
         #     self.is_correct = False
         #     return
 
-        print("Oporowo")
+        self.is_correct = True
         return
 
     def evaluate(self, task: Task, services: Services, trucks: List[Truck]):
@@ -218,7 +221,8 @@ class Genome:
                 continue
             truck = trucks[i]
             distance = distances[i]
-            total_evaluation += (distance / truck.velocity) * (distance * truck.burning / 100 + task.pay_rate)
+            total_evaluation += (distance / truck.velocity) * (
+                    distance * truck.burning / 100 + task.pay_rate) + 0.25 * truck.cargo
 
         self.fitness = total_evaluation
         if total_evaluation == 0:
@@ -229,7 +233,7 @@ class Genome:
 
 class Population:
     def __init__(self, task: Task, create: bool = True):
-        self.evaluation = None
+        self.evaluations = None
         self.population = []
         self.selection_size = task.selection_size
         self.crossover_rate = task.crossover_rate
@@ -251,7 +255,7 @@ class Population:
         return tournaments[index_best_genome]
 
     def crossover(self, parent1: Genome, parent2: Genome):
-        if np.random.random() < self.crossover_rate:
+        if np.random.random() <= self.crossover_rate:
             temp1 = parent1.genome[0:self.no_of_trucks]
             temp2 = parent2.genome[0:self.no_of_trucks]
             if is_same(temp1, temp2):
@@ -274,17 +278,26 @@ class Population:
             else:
                 child1 = copy.deepcopy(parent1)
                 child2 = copy.deepcopy(parent2)
-                for i in range(0, self.no_of_trucks):
-                    random_value = np.random.randint(0, self.no_of_cities_connections // self.no_of_cities, 2)
-                    index = self.no_of_trucks + self.no_of_cities_connections * i
+
+                random_value = np.random.randint(0, self.no_of_cities_connections // self.no_of_cities, 2)
+
+                try:
+                    truck_index = choose_truck(parent1.genome, self.no_of_trucks)
+                    index = self.no_of_trucks + self.no_of_cities_connections * truck_index
                     part_genome1 = child1.genome[index:index + self.no_of_cities_connections]
+                    child1.genome[index:index + self.no_of_cities_connections] = \
+                        toggle_part_genome(part_genome1, random_value[0], self.no_of_cities)
+                except ValueError:
+                    print(end='')  # nic nie ma robic
+
+                try:
+                    truck_index = choose_truck(parent2.genome, self.no_of_trucks)
+                    index = self.no_of_trucks + self.no_of_cities_connections * truck_index
                     part_genome2 = child2.genome[index:index + self.no_of_cities_connections]
-                    child1.genome[index:index + self.no_of_cities_connections] = toggle_part_genome(part_genome1,
-                                                                                                    random_value[0],
-                                                                                                    self.no_of_cities)
-                    child2.genome[index:index + self.no_of_cities_connections] = toggle_part_genome(part_genome2,
-                                                                                                    random_value[1],
-                                                                                                    self.no_of_cities)
+                    child2.genome[index:index + self.no_of_cities_connections] = \
+                        toggle_part_genome(part_genome2, random_value[1], self.no_of_cities)
+                except ValueError:
+                    print(end='')  # nic nie ma robic
 
         else:
             child1 = parent1
@@ -293,12 +306,12 @@ class Population:
         return child1, child2
 
     def best_genome(self):
-        best_genome_index = self.evaluation.index(min(self.evaluation))
+        best_genome_index = self.evaluations.index(min(self.evaluations))
         return self.population[best_genome_index]
 
     def evaluate(self, task: Task, services: Services, trucks: List[Truck]) -> List:
-        self.evaluation = [genome.evaluate(task, services, trucks) for genome in self.population]
-        return self.evaluation
+        self.evaluations = [genome.evaluate(task, services, trucks) for genome in self.population]
+        return self.evaluations
 
 
 class Solver:
@@ -311,7 +324,7 @@ class Solver:
             trucks_db = dbconnector.dbGetQuery(con, "SELECT * FROM trucks")
             dbconnector.close_connection(con)
         except dbconnector.OperationalError as e:
-            print("Error: {}".format(e.pgerror))
+            print(f"Error: No internet connection {e.pgerror}")
             trucks_db = nointernethelpers.db_trucks
 
         for truck in trucks_db:
@@ -331,26 +344,46 @@ class Solver:
         the_best_genome = None  # najlepszy genom
         the_best_evaluation = incorrect_fitness  # najlepsza ewaluacja
         the_best_genome_population = []  # najlepszy genom w populacji
+        best_counter = 0  # zliczanie przez ile generacji dany genom jest najlepszy
 
         for iteration in range(iterations):
+            if iteration > 1 and best_genome_history[iteration - 1] is best_genome_history[iteration - 2]:
+                best_counter += 1
+
             if (iteration + 1) % 10 == 0:
                 print("Iteracja: {}".format(iteration + 1))
 
-            new_population = Population(self.task, False)
+            # dywersyfikacja
+            if best_counter >= int(iterations * 0.1):
+                best_counter = 0
+                new_population = Population(self.task)
+                self.population = new_population
+                for genome in self.population.population:
+                    genome.check_correctness(self.task, self.services, self.trucks)
+            else:
+                new_population = Population(self.task, False)
 
-            n = len(self.population) // 2
-            for __ in range(n):
-                parent1 = self.population.selection(self.task, self.services, self.trucks)
-                parent2 = self.population.selection(self.task, self.services, self.trucks)
-                child1, child2 = self.population.crossover(parent1, parent2)
-                child1.check_correctness(self.task, self.services, self.trucks)
-                child2.check_correctness(self.task, self.services, self.trucks)
-                child1.mutate(self.trucks, self.task.no_of_trucks)
-                child1.check_correctness(self.task, self.services, self.trucks)
-                child2.mutate(self.trucks, self.task.no_of_trucks)
-                child2.check_correctness(self.task, self.services, self.trucks)
-                new_population.population.append(child1)
-                new_population.population.append(child2)
+                n = len(self.population) // 2
+                for population_iter in range(n):
+                    # elitaryzm
+                    if population_iter < 3:
+                        # ryzykowne zagranie ze najlepszy z selekcji i najlepszy najlepszy
+                        parent1 = self.population.selection(self.task, self.services, self.trucks)
+                        parent2 = self.population.selection(self.task, self.services, self.trucks)
+                        new_population.population.append(parent1)
+                        new_population.population.append(parent2)
+                    else:
+                        parent1 = self.population.selection(self.task, self.services, self.trucks)
+                        parent2 = self.population.selection(self.task, self.services, self.trucks)
+                        child1, child2 = self.population.crossover(parent1, parent2)
+                        child1.check_correctness(self.task, self.services, self.trucks)
+                        child2.check_correctness(self.task, self.services, self.trucks)
+                        child1.mutate(self.trucks, self.task.no_of_trucks)
+                        child1.check_correctness(self.task, self.services, self.trucks)
+                        child2.mutate(self.trucks, self.task.no_of_trucks)
+                        child2.check_correctness(self.task, self.services, self.trucks)
+                        new_population.population.append(child1)
+                        new_population.population.append(child2)
 
             self.population.evaluate(self.task, self.services, self.trucks)
             best_genome = self.population.best_genome()
@@ -363,14 +396,14 @@ class Solver:
             best_genome_history.append(the_best_genome)
 
             the_best_genome_population.append(best_genome.fitness)
-            mean_evaluation_history.append(np.mean(self.population.evaluation))
+            mean_evaluation_history.append(np.mean(self.population.evaluations))
 
             self.population = new_population
 
-        generate_result(the_best_genome, self.trucks, self.services)
+        plots = [best_evaluation_history, the_best_genome_population, mean_evaluation_history]
+        report = generate_result(the_best_genome, self.trucks, self.services, plots)
 
-        return the_best_genome, best_evaluation_history, best_genome_history, mean_evaluation_history, \
-            the_best_genome_population
+        return report
 
 
 def toggle(index, genome):
@@ -387,13 +420,20 @@ def toggle_part_genome(part_genome, index, no_of_cities):
     if ones == 1:
         for i in range(no_of_cities):
             part_genome[start + i] = 0
-    elif ones == 0:
+    else:
         new_index = np.random.randint(0, no_of_cities)
         part_genome[start + new_index] = 1
-    else:
-        print("To nie powinno miec miesjca")
-        raise ValueError
+
     return part_genome
+
+
+def choose_truck(genome, number_of_trucks):
+    used_trucks = []
+    for i in range(number_of_trucks):
+        if genome[i] == 1:
+            used_trucks.append(i)
+
+    return np.random.choice(used_trucks)
 
 
 def change_service(index, trucks, trucks_limit):
@@ -401,7 +441,7 @@ def change_service(index, trucks, trucks_limit):
     new_service = np.random.randint(1, trucks_limit)
 
     while new_service == old_service:
-        new_service = np.random.randint(1, trucks_limit, 1)
+        new_service = np.random.randint(0, trucks_limit)
 
     trucks[index].service = new_service
 
@@ -423,7 +463,7 @@ def build_track(array: np.ndarray, services: Services) -> Tuple[str, bool, int]:
 
     result = "Warszawa"
     city = result
-    for _ in range(len(track) + 10):
+    for _ in range(len(track)):
         for i in range(len(track)):
             if track[i][0] == city:
                 result += '-' + track[i][1]
@@ -479,11 +519,11 @@ def generate_part_genome_city(task: Task):
 
         value = np.random.random_sample()
 
-        if value <= 0.75:
-            cities.append(0)
-        else:
+        if value <= 0.2:
             cities.append(1)
             has_one = True
+        else:
+            cities.append(0)
 
     for i in range(task.no_of_cities - len(cities)):
         cities.append(0)
@@ -506,7 +546,7 @@ def generate_population(task: Task):
         genome = []
         for j in range(task.no_of_trucks):
             value = np.random.random_sample()
-            if value <= 0.35:
+            if value <= 0.1:
                 genome.append(1)
             else:
                 genome.append(0)
@@ -540,7 +580,7 @@ def get_city_connections():
         db_city_connections = dbconnector.dbGetQuery(con, "SELECT * FROM citiesconnections")
         dbconnector.close_connection(con)
     except dbconnector.OperationalError as e:
-        print("Error: {}".format(e.pgerror))
+        print(f"Error: No internet connection {e.pgerror}")
         db_city_connections = nointernethelpers.db_city_connections
 
     for _, connection, distance in db_city_connections:
@@ -550,7 +590,7 @@ def get_city_connections():
     return city_connections
 
 
-def generate_result(genome: Genome, trucks: List[Truck], services: Services):
+def generate_result(genome: Genome, trucks: List[Truck], services: Services, plots: List):
     service_code = 0
     result = {}
     for i in range(genome.trucks_length):
@@ -559,13 +599,6 @@ def generate_result(genome: Genome, trucks: List[Truck], services: Services):
             continue
         truck = trucks[i]
         truck.service = service_code
-        print("Wybrana ciezarówka: {}".format(truck))
-        print("Polaczenia: ")
-        for j in range(len(services.cities_connections)):
-            index = genome.trucks_length + (i * len(services.cities_connections)) + j
-            if genome.genome[index] == 1:
-                print(services.cities_connections[j])
-        print("Koniec kursu", end='\n\n')
 
         start = genome.trucks_length + i * len(services.cities_connections)
         track, _, _ = build_track(genome.genome[start:start + len(services.cities_connections)], services)
@@ -574,80 +607,37 @@ def generate_result(genome: Genome, trucks: List[Truck], services: Services):
         result[f'service-{service_code}'] = helper
         service_code += 1
 
-    result['evaluation'] = str(genome.fitness)
+    result['evaluations'] = str(genome.fitness)
 
-    return result
-
-
-def find_solution(services, parameters):
-    solution = Solver(parameters, services)
-    the_best_genome, best_evaluation_history, best_genome_history, mean_evaluation_history, the_best_genome_population \
-        = solution.fit(parameters['iterations'])
-
-    print(best_evaluation_history[-5:], sep='\n')
-    print("Uzyte ciezarówki: ", np.count_nonzero(the_best_genome.genome[0:12]))
-    plt.plot(best_evaluation_history)
-    plt.plot(the_best_genome_population)
-    plt.plot(mean_evaluation_history)
+    plt.plot(plots[0])
+    plt.plot(plots[1])
+    plt.plot(plots[2])
     plt.legend(["Najlepsze rozwiazanie", "Najlepsze rozwiazanie w populacji", "Srednia ocen w populacji"])
     plt.title("Raport przebiegu")
     plt.xlabel("Generacja")
     plt.ylabel("Ocena jakości")
     plt.grid(True)
     plt.savefig("images/raport.png")
-    plt.show()
-    print()
+
+    return result
+
+
+def find_solution(services, parameters):
+    solution = Solver(parameters, services)
+    report = solution.fit(parameters['iterations'])
+
+    return report
 
 
 # ------------------
 # Testowanie
-test_data = [{'city': 'Rzeszów', 'products': ['cheese'], 'weight': '10 t', 'deadline': '7 days'},
-             {'city': 'Gdynia', 'products': ['tomatoes'], 'weight': '15 t', 'deadline': '3 days'},
-             {'city': 'Kraków', 'products': ['pepper'], 'weight': '5 t', 'deadline': '12 days'}]
-
-test_parameters = {'population_size': 300, 'selection_size': 250, 'crossover_rate': 0.95, 'mutation_rate': 0.1,
-                   'pay_rate': 5, 'visited_cities_limit': 2, 'iterations': 500}
-
-find_solution(test_data, test_parameters)
-
-# ------------------
-# Nieuzywane
+# test_data = [{'city': 'Rzeszów', 'products': ['cheese'], 'weight': '10 t', 'deadline': '7 days'},
+#              {'city': 'Gdynia', 'products': ['tomatoes'], 'weight': '15 t', 'deadline': '3 days'},
+#              {'city': 'Kraków', 'products': ['pepper'], 'weight': '5 t', 'deadline': '12 days'},
+#              {'city': 'Wrocław', 'products': ['milk'], 'weight': '3 t', 'deadline': '8 days'},
+#              {'city': 'Sopot', 'products': ['salt'], 'weight': '7 t', 'deadline': '6 days'}]
 #
-# def get_coordinates(city_name):
-#     geolocator = Nominatim(user_agent="my_geocoder")
-#     location = geolocator.geocode(city_name)
+# test_parameters = {'population_size': 100, 'selection_size': 25, 'crossover_rate': 0.95, 'mutation_rate': 0.1,
+#                    'pay_rate': 5, 'visited_cities_limit': 3, 'iterations': 500}
 #
-#     return location.latitude, location.longitude
-#
-#
-# def get_osrm_distance(coordinates):
-#     base_url = f"http://router.project-osrm.org/route/v1/car/"
-#
-#     formatted_coordinates = f"{coordinates[0][1]},{coordinates[0][0]};{coordinates[1][1]},{coordinates[1][0]}"
-#
-#     params = {
-#         'alternatives': 'false',
-#         'steps': 'false',
-#         'geometries': 'geojson',
-#     }
-#
-#     response = requests.get(base_url + formatted_coordinates, params=params)
-#     data = response.json()
-#     route_distance = data['routes'][0]['distance'] / 1000
-#
-#     return route_distance
-#
-#
-# plt.plot(best_evaluation_history)
-# plt.plot(the_best_genome_population)
-# plt.title("Raport przebiegu 2")
-# plt.legend(["Najlepsze rozwiazanie", "Najlepsze rozwiazanie w populacji"])
-# plt.grid(True)
-# plt.show()
-
-Zwracanie = {
-    'service-0': {'route': 'Warszawa', 'truck': '9 Daf XF 450, burning: 22, cargo: 13820, service: 0'},
-    'service-1': {'route': 'Warszawa-Rzeszów-Warszawa',
-                  'truck': '11 MAN TGX 18.480, burning: 32, cargo: 28000, service: 1'},
-    'evaluation': '2407.640813651147'
-}
+# find_solution(test_data, test_parameters)

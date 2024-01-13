@@ -13,10 +13,10 @@ app = Flask(__name__)
 
 @app.route('/process-data', methods=['POST'])
 def process_data():
-    services = request.json
-    solve_engine.find_solution(services)
+    data = request.json
+    report = solve_engine.find_solution(data['services'], data['parameters']) # to musza byc slowniki
 
-    return jsonify(services)
+    return jsonify(report)
 
 
 @app.route('/filter-cities', methods=['POST'])

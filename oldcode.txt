@@ -96,3 +96,38 @@
     #     self.fitness -= unused_trucks * 60
     #
     #     return self.fitness
+
+# def get_coordinates(city_name):
+#     geolocator = Nominatim(user_agent="my_geocoder")
+#     location = geolocator.geocode(city_name)
+#
+#     return location.latitude, location.longitude
+#
+#
+# def get_osrm_distance(coordinates):
+#     base_url = f"http://router.project-osrm.org/route/v1/car/"
+#
+#     formatted_coordinates = f"{coordinates[0][1]},{coordinates[0][0]};{coordinates[1][1]},{coordinates[1][0]}"
+#
+#     params = {
+#         'alternatives': 'false',
+#         'steps': 'false',
+#         'geometries': 'geojson',
+#     }
+#
+#     response = requests.get(base_url + formatted_coordinates, params=params)
+#     data = response.json()
+#     route_distance = data['routes'][0]['distance'] / 1000
+#
+#     return route_distance
+
+
+        # ten kod do wywalenia /*
+        print("Wybrana ciezarówka: {}".format(truck))
+        print("Polaczenia: ")
+        for j in range(len(services.cities_connections)):
+            index = genome.trucks_length + (i * len(services.cities_connections)) + j
+            if genome.genome[index] == 1:
+                print(services.cities_connections[j])
+        print("Koniec kursu", end='\n\n')
+        # */

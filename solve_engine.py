@@ -1,10 +1,4 @@
-# Tutaj bedzie nasz skrypcik pythonowy do przeprowadzenia algorytmu
-
-# todo co zrobic
-# fixme 1 zrobic tak ze jak ciezarowka ma 0 to cala jej trasa jest 0 (przebadac mutowowanie) --- KRZYZOWANIE POPRAWIONE
-# fixme 2 zrobic mechanizm dywersyfikacji --- ZROBIONE
-# fixme 3 zrobic mechanizm elitaryzmu --- ZROBIONE
-
+# skrypcik pythonowy do przeprowadzenia algorytmu
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -15,7 +9,7 @@ import copy
 import dbconnector
 import nointernethelpers
 
-incorrect_fitness = 30000
+incorrect_fitness = 30000  # to musi byc inaczej liczone albo jako inf czy nan
 
 
 class Truck:
@@ -33,10 +27,10 @@ class Truck:
 
     def __str__(self):
         return str(self.id) + " " + self.brand + " " + self.model + ", burning: " + str(
-            self.burning) + ", cargo: " + str(self.cargo) + ", service: " + str(self.service)
+            self.burning) + ", cargo: " + str(self.cargo)
 
     def __repr__(self):
-        return str(self.id) + " " + self.brand + " " + self.model + " " + str(self.service)
+        return str(self.id) + " " + self.brand + " " + self.model
 
 
 class SingleService:
@@ -121,18 +115,27 @@ class Genome:
 
         raise StopIteration
 
-    def mutate(self, trucks: List[Truck], trucks_limit):
+    def mutate(self, task: Task):
         if np.random.random_sample() < self.mutation_rate:
-            index = np.random.randint(0, self.trucks_length, int(self.trucks_length * self.mutation_rate))
-            if np.random.randint(1, 11) <= 6:
-                for i in index:
-                    toggle(i, self.genome)
+            index = np.random.randint(0, self.trucks_length - 1)
+
+            toggle(index, self.genome)
+            start_index = self.trucks_length + index * task.no_of_cities_connections
+            if self.genome[index] == 1:
+                self.genome[start_index:start_index + task.no_of_cities_connections] = generate_part_genome(task)
             else:
-                if self.genome[index[0]] == 0:
-                    self.genome[index[0]] = 1
-                change_service(index[0], trucks, trucks_limit)
+                self.genome[start_index:start_index + task.no_of_cities_connections] = \
+                    np.repeat(0, task.no_of_cities_connections)
 
     def check_correctness(self, task: Task, services: Services, trucks: List[Truck]):
+        """
+        Metoda sprawdza poprawnosc rozwiazania
+        :param task: obiekt z
+        :param services:
+        :param trucks:
+        :return:
+        """
+
         all_cities = []
 
         # sprawdzanie czy jest wyslana choc jedna ciezarowka
@@ -182,7 +185,7 @@ class Genome:
                 self.is_correct = False
                 return
 
-                # sprawdzanie czy odwiedza wszystkie miasta ktore ma w trasie
+            # sprawdzanie czy odwiedza wszystkie miasta ktore ma w trasie
             if len(track) != used_cities:
                 self.is_correct = False
                 return
@@ -199,11 +202,11 @@ class Genome:
                 self.is_correct = False
                 return
 
-        # fixme albo to ograniczenie jest zwalone albo mega trudno znalezc rozwiazanie
+        # fixme to ograniczenie jest lekko popsute albo mega trudno znalezc dopuszczalne rozwiazanie
         # sprawdzanie czy niepotrzebine puszcza jeszcze raz ciezarowke do miasta ktore zostalo odwiedzone
-        # if len(all_cities) != task.no_of_cities:
-        #     self.is_correct = False
-        #     return
+        if len(all_cities) <= int(task.no_of_cities / 2) + 1:
+            self.is_correct = False
+            return
 
         self.is_correct = True
         return
@@ -319,6 +322,7 @@ class Solver:
         self.population = None
         self.services = Services(services)
         self.trucks: List[Truck] = []
+
         try:
             con = dbconnector.conncect_to_db()
             trucks_db = dbconnector.dbGetQuery(con, "SELECT * FROM trucks")
@@ -332,7 +336,7 @@ class Solver:
 
         self.task = Task(algorythm_parameters, len(self.trucks), len(self.services.cities_connections), len(services))
 
-    def fit(self, iterations):
+    def fit(self, iterations, service_code):
         print("Zaczynam algorytm")
         self.population = Population(self.task)
         for genome in self.population.population:
@@ -350,11 +354,11 @@ class Solver:
             if iteration > 1 and best_genome_history[iteration - 1] is best_genome_history[iteration - 2]:
                 best_counter += 1
 
-            if (iteration + 1) % 10 == 0:
+            if (iteration + 1) % 25 == 0:
                 print("Iteracja: {}".format(iteration + 1))
 
             # dywersyfikacja
-            if best_counter >= int(iterations * 0.1):
+            if best_counter >= int(iterations * 0.25):
                 best_counter = 0
                 new_population = Population(self.task)
                 self.population = new_population
@@ -378,9 +382,9 @@ class Solver:
                         child1, child2 = self.population.crossover(parent1, parent2)
                         child1.check_correctness(self.task, self.services, self.trucks)
                         child2.check_correctness(self.task, self.services, self.trucks)
-                        child1.mutate(self.trucks, self.task.no_of_trucks)
+                        child1.mutate(self.task)
                         child1.check_correctness(self.task, self.services, self.trucks)
-                        child2.mutate(self.trucks, self.task.no_of_trucks)
+                        child2.mutate(self.task)
                         child2.check_correctness(self.task, self.services, self.trucks)
                         new_population.population.append(child1)
                         new_population.population.append(child2)
@@ -401,7 +405,7 @@ class Solver:
             self.population = new_population
 
         plots = [best_evaluation_history, the_best_genome_population, mean_evaluation_history]
-        report = generate_result(the_best_genome, self.trucks, self.services, plots)
+        report = generate_result(the_best_genome, self.trucks, self.services, plots, service_code)
 
         return report
 
@@ -421,7 +425,7 @@ def toggle_part_genome(part_genome, index, no_of_cities):
         for i in range(no_of_cities):
             part_genome[start + i] = 0
     else:
-        new_index = np.random.randint(0, no_of_cities)
+        new_index = np.random.randint(0, no_of_cities - 1)
         part_genome[start + new_index] = 1
 
     return part_genome
@@ -590,9 +594,9 @@ def get_city_connections():
     return city_connections
 
 
-def generate_result(genome: Genome, trucks: List[Truck], services: Services, plots: List):
-    service_code = 0
+def generate_result(genome: Genome, trucks: List[Truck], services: Services, plots: List, service_code):
     result = {}
+    service_number = 0
     for i in range(genome.trucks_length):
         helper = {}
         if genome.genome[i] == 0:
@@ -604,8 +608,8 @@ def generate_result(genome: Genome, trucks: List[Truck], services: Services, plo
         track, _, _ = build_track(genome.genome[start:start + len(services.cities_connections)], services)
         helper['truck'] = str(truck)
         helper['route'] = track
-        result[f'service-{service_code}'] = helper
-        service_code += 1
+        result[f'service-{service_number}'] = helper
+        service_number += 1
 
     result['evaluations'] = str(genome.fitness)
 
@@ -618,26 +622,15 @@ def generate_result(genome: Genome, trucks: List[Truck], services: Services, plo
     plt.ylabel("Ocena jakości")
     plt.grid(True)
     plt.savefig("images/raport.png")
+    plt.show()
 
     return result
 
 
 def find_solution(services, parameters):
+    service_code = 0
+
     solution = Solver(parameters, services)
-    report = solution.fit(parameters['iterations'])
+    report = solution.fit(parameters['iterations'], service_code)
 
     return report
-
-
-# ------------------
-# Testowanie
-# test_data = [{'city': 'Rzeszów', 'products': ['cheese'], 'weight': '10 t', 'deadline': '7 days'},
-#              {'city': 'Gdynia', 'products': ['tomatoes'], 'weight': '15 t', 'deadline': '3 days'},
-#              {'city': 'Kraków', 'products': ['pepper'], 'weight': '5 t', 'deadline': '12 days'},
-#              {'city': 'Wrocław', 'products': ['milk'], 'weight': '3 t', 'deadline': '8 days'},
-#              {'city': 'Sopot', 'products': ['salt'], 'weight': '7 t', 'deadline': '6 days'}]
-#
-# test_parameters = {'population_size': 100, 'selection_size': 25, 'crossover_rate': 0.95, 'mutation_rate': 0.1,
-#                    'pay_rate': 5, 'visited_cities_limit': 3, 'iterations': 500}
-#
-# find_solution(test_data, test_parameters)

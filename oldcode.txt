@@ -131,3 +131,12 @@
                 print(services.cities_connections[j])
         print("Koniec kursu", end='\n\n')
         # */
+
+# def change_service(index: int, trucks: List[Truck], trucks_limit):
+#     old_service = trucks[index].service
+#     new_service = np.random.randint(1, trucks_limit)
+#
+#     while new_service == old_service:
+#         new_service = np.random.randint(0, trucks_limit)
+#
+#     trucks[index].service = new_service

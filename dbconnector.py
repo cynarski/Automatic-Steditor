@@ -6,6 +6,7 @@ from psycopg2 import connect, OperationalError
 from typing import List
 
 # Konfiguracja do polaczenia z nasza baza danych
+# baza nie jest zabezpieczona w zaden sposob i mozna zdropowac wszystkie tabele
 db_config = {
     'host': 'ep-floral-breeze-43648026.eu-central-1.aws.neon.tech',
     'database': 'AutomaticSteditor',
@@ -50,11 +51,3 @@ def dbGetQuery(connection, query: str) -> List:
     cursor.close()
 
     return result
-
-
-def dbAddRecord(connection, query: str) -> None:
-    cursor = connection.cursor()
-
-    cursor.execute(query)
-
-    cursor.close()
